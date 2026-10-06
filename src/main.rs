@@ -8,24 +8,19 @@ use walkdir::WalkDir;
 use zip::ZipWriter;
 use zip::write::SimpleFileOptions;
 
-/// A simple CLI tool to backup game save folders into a timestamped zip.
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// The folder path you want to backup
     #[arg(short, long)]
     path: PathBuf,
 
-    /// The prefix for the backup filename (default: "backup")
     #[arg(short, long, default_value = "backup")]
     name: String,
 }
 
 fn main() -> Result<()> {
-    // 1. Parse the arguments from the terminal
     let args = Args::parse();
 
-    // 2. Use the path provided by the user instead of hardcoding
     let save_path = args.path;
 
     if !save_path.exists() {
@@ -33,7 +28,6 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    // 3. Use the name provided by the user for the zip file
     let timestamp = Local::now().format("%Y-%m-%d_%H-%M-%S").to_string();
     let archive_name = format!("{}_{}.zip", args.name, timestamp);
 
